@@ -1,6 +1,7 @@
 import os
 import json
 import sqlite3
+import platform
 from typing import List
 from .exception import CodeLauncherException
 
@@ -21,9 +22,16 @@ def parse_vscode_state(value: str) -> List[str]:
 
 
 def get_vscode_state_path() -> str:
-    if 'APPDATA' not in os.environ:
-        raise CodeLauncherException("APPDATA is not found in environment variables")
-    return os.path.join(os.environ['APPDATA'], "Code", "User", "globalStorage", "state.vscdb")
+    if platform.system() == 'Windows':
+        if 'APPDATA' not in os.environ:
+            raise CodeLauncherException("APPDATA is not found in environment variables")
+        return os.path.join(os.environ['APPDATA'], "Code", "User", "globalStorage", "state.vscdb")
+    elif platform.system() == 'Darwin':
+        if 'HOME' not in os.environ:
+            raise CodeLauncherException("HOME is not found in environment variables")
+        return os.path.join(os.environ['HOME'], "Library", "Application Support", "Code", "User", "globalStorage", "state.vscdb")
+    else:
+        raise CodeLauncherException("Unsupported OS: " + platform.system())
 
 
 def read_vscode_state() -> List[str]:

@@ -17,6 +17,7 @@ class ParsedVscodeProject:
     project_type: VscodeProjectType
     inferred_project_name: str
     url: str
+    uri: str
 
 
 def get_url_for_file_project(path: str) -> str:
@@ -56,4 +57,4 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
     else:
         raise CodeLauncherException(f"Unknown vscode uri scheme: {parsed_uri.scheme}")
 
-    return ParsedVscodeProject(project_type, inferred_project_name, url)
+    return ParsedVscodeProject(project_type, inferred_project_name, url, uri)

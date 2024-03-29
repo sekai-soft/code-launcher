@@ -24,9 +24,31 @@ class MyFrame(wx.Frame):
         self.Show()
 
     def render(self):
-        self.sizer.AddSpacer(8)
         vscode_projects = map(parse_vscode_uri, read_vscode_state())
         vscode_projects = sorted(vscode_projects, key=lambda p: p.inferred_project_name)
+        self.sizer.AddSpacer(8)
+
+        header_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        header_sizer.AddSpacer(8)
+        header_project_count_text = wx.StaticText(self.panel, label=f'{len(vscode_projects)} projects')
+        header_project_count_text.SetForegroundColour(wx.Colour(128, 128, 128))
+        header_project_count_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
+        header_sizer.Add(header_project_count_text, flag=wx.ALIGN_CENTER_VERTICAL)
+        header_sizer.AddSpacer(8)
+
+        header_sync_button = wx.Button(self.panel, label='Sync to Start menu')
+        header_sync_button.Bind(wx.EVT_BUTTON, self.onSync)
+        header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        header_sizer.AddSpacer(4)
+
+        header_explain_button_height = header_sync_button.GetSize().height
+        header_explain_button = wx.Button(self.panel, label='?')
+        header_explain_button.SetMinSize(wx.Size(header_explain_button_height, header_explain_button_height))
+        header_explain_button.Bind(wx.EVT_BUTTON, self.onExplain)
+        header_sizer.Add(header_explain_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        self.sizer.Add(header_sizer)
+
+        self.sizer.AddSpacer(8)
         for vscode_project in vscode_projects:
             project_sizer = wx.BoxSizer(wx.HORIZONTAL)
             project_sizer.AddSpacer(8)
@@ -68,6 +90,15 @@ class MyFrame(wx.Frame):
     
     def onLaunchVscodeProject(self, event, project_uri: str):
         subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri])
+
+    def onSync(self, event):
+        pass
+
+    def onExplain(self, event):
+        wx.MessageBox(
+            'Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run',
+            'What is "Sync to Start menu"?',
+            wx.OK | wx.ICON_INFORMATION)
 
     def onClose(self, event):
         self.taskBarIcon.RemoveIcon()

@@ -1,8 +1,13 @@
+import platform
 from .exception import CodeLauncherUiException
 from code_launcher.parse_vscode_uri import VscodeProjectType
 
 
 APP_ICON = 'icon.ico'
+if platform.system() == 'Darwin':
+    MENU_BAR_ICON = 'icon_mac_menu_bar.ico'
+else:
+    MENU_BAR_ICON = 'icon.ico'
 APP_NAME = 'Code Launcher'
 
 LOCAL_PROJECT_ICON = 'local.ico'

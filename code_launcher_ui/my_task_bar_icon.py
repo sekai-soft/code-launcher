@@ -1,6 +1,6 @@
 import wx
 from wx.adv import TaskBarIcon, EVT_TASKBAR_LEFT_DOWN
-from .constants import APP_ICON, APP_NAME
+from .constants import MENU_BAR_ICON, APP_NAME
 
 
 class MyTaskBarIcon(TaskBarIcon):
@@ -8,7 +8,7 @@ class MyTaskBarIcon(TaskBarIcon):
         TaskBarIcon.__init__(self)
         self.frame = frame
 
-        self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO), APP_NAME)
+        self.SetIcon(wx.Icon(MENU_BAR_ICON, wx.BITMAP_TYPE_ICO), APP_NAME)
         self.Bind(wx.EVT_MENU, self.OnTaskBarClose, id=1)
         self.Bind(EVT_TASKBAR_LEFT_DOWN, self.OnTaskBarLeftClick)
 

@@ -1,7 +1,7 @@
 import wx
 import subprocess
-import win32gui
-from .constants import APP_ICON, APP_NAME, project_type_to_icon
+import platform
+from .constants import APP_ICON, APP_NAME, SYNC_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.read_vscode_state import read_vscode_state
 from code_launcher.parse_vscode_uri import parse_vscode_uri
@@ -16,7 +16,6 @@ class MyFrame(wx.Frame):
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.panel.SetSizer(self.sizer)
 
-        self.SetBackgroundColour(wx.Colour(255, 255, 255))
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)
         self.Bind(wx.EVT_ICONIZE, self.onMinimize)
@@ -32,18 +31,15 @@ class MyFrame(wx.Frame):
         header_sizer = wx.BoxSizer(wx.HORIZONTAL)
         header_sizer.AddSpacer(8)
         header_project_count_text = wx.StaticText(self.panel, label=f'{len(vscode_projects)} projects')
-        header_project_count_text.SetForegroundColour(wx.Colour(128, 128, 128))
         header_project_count_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
         header_sizer.Add(header_project_count_text, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(8)
 
-        header_sync_button = wx.Button(self.panel, label='Sync to Start menu')
-        win32gui.SendMessage(header_sync_button.GetHandle(), 0x0000160C, None, True)
-
-        # _, header_sync_button_height = header_sync_button.GetTextExtent(header_sync_button.GetLabel())
-        # header_sync_button_uac_icon = wx.Bitmap('uac.ico')
-        # wx.Bitmap.Rescale(header_sync_button_uac_icon, wx.Size(header_sync_button_height, header_sync_button_height))
-        # header_sync_button.SetBitmap(header_sync_button_uac_icon)
+        header_sync_button = wx.Button(self.panel, label=SYNC_BUTTON_LABEL)
+        if platform.system() == 'Windows':
+            import win32gui
+            BCM_SETSHIELD = 0x0000160C
+            win32gui.SendMessage(header_sync_button.GetHandle(), BCM_SETSHIELD, None, True)
         header_sync_button.Bind(wx.EVT_BUTTON, self.onSync)
         header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(4)
@@ -77,14 +73,12 @@ class MyFrame(wx.Frame):
             project_texts_sizer = wx.BoxSizer(wx.VERTICAL)
 
             project_name_text = wx.StaticText(self.panel, label=vscode_project.inferred_project_name)
-            project_name_text.SetForegroundColour(wx.Colour(0, 0, 0))
             project_name_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD))
             project_name_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_name_text.Bind(wx.EVT_LEFT_DOWN, lambda event, uri=vscode_project.uri: self.onLaunchVscodeProject(event, uri))
             project_texts_sizer.Add(project_name_text)
 
             project_path_text = wx.StaticText(self.panel, label=vscode_project.url)
-            project_path_text.SetForegroundColour(wx.Colour(128, 128, 128))
             project_path_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
             project_path_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_path_text.Bind(wx.EVT_LEFT_DOWN, lambda event, uri=vscode_project.uri: self.onLaunchVscodeProject(event, uri))
@@ -103,8 +97,8 @@ class MyFrame(wx.Frame):
 
     def onExplain(self, event):
         wx.MessageBox(
-            'Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run (requires Administrator privileges).',
-            'What is "Sync to Start menu"?',
+            SYNC_EXPLAINATION,
+            f'What is "{SYNC_BUTTON_LABEL}"?',
             wx.OK | wx.ICON_INFORMATION)
 
     def onClose(self, event):

@@ -14,6 +14,15 @@ LOCAL_PROJECT_ICON = 'local.ico'
 WSL_PROJECT_ICON = 'wsl.ico'
 DEV_CONTAINER_PROJECT_ICON = 'dev-container.ico'
 
+if platform.system() == 'Windows':
+    SYNC_BUTTON_LABEL = "Sync to Start menu"
+elif platform.system() == 'Darwin':
+    SYNC_BUTTON_LABEL = "Sync to ~/Applications"
+
+if platform.system() == 'Windows':
+    SYNC_EXPLAINATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run (requires Administrator privileges)."""
+elif platform.system() == 'Darwin':
+    SYNC_EXPLAINATION = """Synchronizes your VSCode projects as apps to the ~/Applications folder so that you can launch them quickly in Spotlight."""
 
 def project_type_to_icon(project_type) -> str:
     if project_type == VscodeProjectType.Local:

@@ -31,6 +31,11 @@ def get_url_for_file_project(path: str) -> str:
         if windows_path.startswith(windows_user_profile):
             return windows_path.replace(os.environ['USERPROFILE'], '~')
         return windows_path
+    if 'HOME' not in os.environ:
+        return path
+    home = os.environ['HOME']
+    if path.startswith(home):
+        return path.replace(home, '~')
     return path
 
 

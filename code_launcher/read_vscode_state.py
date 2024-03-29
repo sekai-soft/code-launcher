@@ -3,7 +3,7 @@ import json
 import sqlite3
 import platform
 from typing import List
-from .exception import CodeLauncherException
+from .exception import CodeLauncherException, UnsupportedOSException
 
 
 def parse_vscode_state(value: str) -> List[str]:
@@ -30,8 +30,7 @@ def get_vscode_state_path() -> str:
         if 'HOME' not in os.environ:
             raise CodeLauncherException("HOME is not found in environment variables")
         return os.path.join(os.environ['HOME'], "Library", "Application Support", "Code", "User", "globalStorage", "state.vscdb")
-    else:
-        raise CodeLauncherException("Unsupported OS: " + platform.system())
+    raise UnsupportedOSException()
 
 
 def read_vscode_state() -> List[str]:

@@ -37,6 +37,10 @@ class MyFrame(wx.Frame):
         header_sizer.AddSpacer(8)
 
         header_sync_button = wx.Button(self.panel, label='Sync to Start menu')
+        _, header_sync_button_height = header_sync_button.GetTextExtent(header_sync_button.GetLabel())
+        header_sync_button_uac_icon = wx.Bitmap('uac.ico')
+        wx.Bitmap.Rescale(header_sync_button_uac_icon, wx.Size(header_sync_button_height, header_sync_button_height))
+        header_sync_button.SetBitmap(header_sync_button_uac_icon)
         header_sync_button.Bind(wx.EVT_BUTTON, self.onSync)
         header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(4)
@@ -96,7 +100,7 @@ class MyFrame(wx.Frame):
 
     def onExplain(self, event):
         wx.MessageBox(
-            'Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run',
+            'Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run (requires Administrator privileges).',
             'What is "Sync to Start menu"?',
             wx.OK | wx.ICON_INFORMATION)
 

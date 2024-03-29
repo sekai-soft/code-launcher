@@ -1,5 +1,6 @@
 import wx
 import subprocess
+import win32gui
 from .constants import APP_ICON, APP_NAME, project_type_to_icon
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.read_vscode_state import read_vscode_state
@@ -37,10 +38,12 @@ class MyFrame(wx.Frame):
         header_sizer.AddSpacer(8)
 
         header_sync_button = wx.Button(self.panel, label='Sync to Start menu')
-        _, header_sync_button_height = header_sync_button.GetTextExtent(header_sync_button.GetLabel())
-        header_sync_button_uac_icon = wx.Bitmap('uac.ico')
-        wx.Bitmap.Rescale(header_sync_button_uac_icon, wx.Size(header_sync_button_height, header_sync_button_height))
-        header_sync_button.SetBitmap(header_sync_button_uac_icon)
+        win32gui.SendMessage(header_sync_button.GetHandle(), 0x0000160C, None, True)
+
+        # _, header_sync_button_height = header_sync_button.GetTextExtent(header_sync_button.GetLabel())
+        # header_sync_button_uac_icon = wx.Bitmap('uac.ico')
+        # wx.Bitmap.Rescale(header_sync_button_uac_icon, wx.Size(header_sync_button_height, header_sync_button_height))
+        # header_sync_button.SetBitmap(header_sync_button_uac_icon)
         header_sync_button.Bind(wx.EVT_BUTTON, self.onSync)
         header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(4)
@@ -96,7 +99,7 @@ class MyFrame(wx.Frame):
         subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri])
 
     def onSync(self, event):
-        pass
+        print('on sync')
 
     def onExplain(self, event):
         wx.MessageBox(

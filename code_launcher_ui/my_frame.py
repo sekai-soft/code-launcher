@@ -33,6 +33,7 @@ class MyFrame(wx.Frame):
                 bitmap=wx.Bitmap(
                     project_type_to_icon(parsed_vscode_project.project_type)))
             project_icon_image.SetSize((32, 32))
+            project_icon_image.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_sizer.Add(project_icon_image)
             project_sizer.AddSpacer(8)
 
@@ -41,11 +42,13 @@ class MyFrame(wx.Frame):
             project_name_text = wx.StaticText(self.panel, label=parsed_vscode_project.inferred_project_name)
             project_name_text.SetForegroundColour(wx.Colour(0, 0, 0))
             project_name_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD))
+            project_name_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_texts_sizer.Add(project_name_text)
 
             project_path_text = wx.StaticText(self.panel, label=parsed_vscode_project.url)
             project_path_text.SetForegroundColour(wx.Colour(128, 128, 128))
             project_path_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
+            project_path_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_texts_sizer.Add(project_path_text)
 
             project_sizer.Add(project_texts_sizer)

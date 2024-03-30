@@ -20,7 +20,7 @@ elif platform.system() == 'Darwin':
     SYNC_BUTTON_LABEL = "Sync to ~/Applications"
 
 if platform.system() == 'Windows':
-    SYNC_EXPLAINATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run (requires Administrator privileges)."""
+    SYNC_EXPLAINATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run."""
 elif platform.system() == 'Darwin':
     SYNC_EXPLAINATION = """Synchronizes your VSCode projects as apps to the ~/Applications folder so that you can launch them quickly in Spotlight."""
 

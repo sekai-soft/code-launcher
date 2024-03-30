@@ -14,7 +14,7 @@ def reconcile():
     # read list of existing shortcuts
     existing_shortcuts = list_vscode_shortcuts()
 
-    # reconcile: create and delete (needs sudo)
+    # reconcile: create and delete
     added_folder_uris = []
     for vscode_folder_uri in vscode_folder_uris:
         if vscode_folder_uri not in existing_shortcuts:

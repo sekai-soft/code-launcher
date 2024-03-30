@@ -1,11 +1,11 @@
 import wx
 import subprocess
-import platform
 from .constants import APP_ICON, APP_NAME, SYNC_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.read_vscode_state import read_vscode_state
 from code_launcher.parse_vscode_uri import parse_vscode_uri
 from code_launcher.find_vscode import find_vscode_exe_path
+from code_launcher.reconcile import reconcile
 
 
 class MyFrame(wx.Frame):
@@ -36,10 +36,6 @@ class MyFrame(wx.Frame):
         header_sizer.AddSpacer(8)
 
         header_sync_button = wx.Button(self.panel, label=SYNC_BUTTON_LABEL)
-        if platform.system() == 'Windows':
-            import win32gui
-            BCM_SETSHIELD = 0x0000160C
-            win32gui.SendMessage(header_sync_button.GetHandle(), BCM_SETSHIELD, None, True)
         header_sync_button.Bind(wx.EVT_BUTTON, self.onSync)
         header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(4)
@@ -93,7 +89,7 @@ class MyFrame(wx.Frame):
         subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri])
 
     def onSync(self, event):
-        print('on sync')
+        reconcile()
 
     def onExplain(self, event):
         wx.MessageBox(

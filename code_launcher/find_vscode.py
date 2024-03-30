@@ -46,13 +46,3 @@ def find_vscode_exe_path() -> str:
             raise CodeLauncherException("VSCode executable path is not found")
         return p
     raise UnsupportedOSException()
-
-
-"""
-Finds the default cmd path for VSCode (User) on Windows
-"""
-def find_vscode_cmd_path() -> str:
-    p = os.path.join(find_vscode_bin_path(), "code.cmd")
-    if not os.path.exists(p):
-        raise CodeLauncherException("VSCode cmd path is not found")
-    return p

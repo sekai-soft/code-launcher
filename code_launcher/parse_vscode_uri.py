@@ -1,9 +1,10 @@
 import platform
 import os
+import re
 from enum import Enum
 from dataclasses import dataclass
 from urllib.parse import urlparse, unquote
-from .exception import CodeLauncherException
+from .exception import CodeLauncherException, UnsupportedOSException
 
 
 class VscodeProjectType(Enum):
@@ -16,11 +17,13 @@ class VscodeProjectType(Enum):
 class ParsedVscodeProject:
     project_type: VscodeProjectType
     inferred_project_name: str
+    # in case there is a conflict in inferred_project_name
+    unique_project_identifier: str
     url: str
     uri: str
 
 
-def get_url_for_file_project(path: str) -> str:
+def _compute_url_for_file_project(path: str) -> str:
     if platform.system() == 'Windows':
         splits = path.split('/')
         windows_path_parts = [splits[1].capitalize()] + splits[2:]
@@ -31,12 +34,22 @@ def get_url_for_file_project(path: str) -> str:
         if windows_path.startswith(windows_user_profile):
             return windows_path.replace(os.environ['USERPROFILE'], '~')
         return windows_path
-    if 'HOME' not in os.environ:
+    elif platform.system() == 'Darwin':
+        if 'HOME' not in os.environ:
+            return path
+        home = os.environ['HOME']
+        if path.startswith(home):
+            return path.replace(home, '~')
         return path
-    home = os.environ['HOME']
-    if path.startswith(home):
-        return path.replace(home, '~')
-    return path
+    raise UnsupportedOSException()
+
+
+def _decoded_path_as_safe_filename(decoded_path: str) -> str:
+        # For Windows (& macOS because it replaces forward slashes already)
+        res = re.sub(r'[\\/*?:"<>|]', '_', decoded_path)  # replace reserved characters with underscore
+        res = re.sub(r'\.$', '', res)  # remove trailing period
+        res = re.sub(r'^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$', '_', res, flags=re.I)  # replace reserved names
+        return res
 
 
 def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
@@ -45,8 +58,12 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
     if parsed_uri.scheme == 'file':
         project_type = VscodeProjectType.Local
         decoded_path = unquote(parsed_uri.path)
+        # if the project can be created on the local OS in the first place,
+        # there is no worry that the project name (which is only a part of the original project path)
+        # could ever exceed local OS limit
         inferred_project_name = decoded_path.split('/')[-1]
-        url = get_url_for_file_project(decoded_path)
+        unique_project_identifier = _decoded_path_as_safe_filename(decoded_path)
+        url = _compute_url_for_file_project(decoded_path)
 
     elif parsed_uri.scheme == 'vscode-remote':
         decoded_netloc = unquote(parsed_uri.netloc)
@@ -54,9 +71,13 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
         if decoded_netloc.startswith('wsl+'):
             decoded_path = unquote(parsed_uri.path)
             project_type = VscodeProjectType.WSL
-            url = decoded_netloc[4:] + ":"  + decoded_path
+            wsl_name = decoded_netloc[len('wsl+'):]
+            url = wsl_name + ":"  + decoded_path
+            unique_project_identifier = _decoded_path_as_safe_filename(url)
         elif decoded_netloc.startswith('dev-container+'):
             project_type = VscodeProjectType.DevContainer
+            dev_container_hash = decoded_netloc[len('dev-container+'):]
+            unique_project_identifier = dev_container_hash[:8]
             url = 'dev-container'
         else:
             raise CodeLauncherException(f"Unknown vscode-remote netloc type: {decoded_netloc}")
@@ -64,4 +85,4 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
     else:
         raise CodeLauncherException(f"Unknown vscode uri scheme: {parsed_uri.scheme}")
 
-    return ParsedVscodeProject(project_type, inferred_project_name, url, uri)
+    return ParsedVscodeProject(project_type, inferred_project_name, unique_project_identifier, url, uri)

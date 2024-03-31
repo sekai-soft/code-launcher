@@ -1,12 +1,19 @@
 import wx
 import subprocess
+import platform
 from .constants import APP_ICON, APP_NAME, SYNC_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
 from .my_task_bar_icon import MyTaskBarIcon
+from code_launcher.exception import UnsupportedOSException
 from code_launcher.read_vscode_state import read_vscode_state
 from code_launcher.parse_vscode_uri import parse_vscode_uri
 from code_launcher.find_vscode import find_vscode_exe_path
 from code_launcher.reconcile import reconcile
 from code_launcher.ensure_shortcuts_folder import ensure_shortcuts_folder
+
+
+MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID = 1
+MENU_ITEM_ABOUT_ID = 2
+MENU_ITEM_EXIT_ID = 3
 
 
 class MyFrame(wx.Frame):
@@ -28,18 +35,18 @@ class MyFrame(wx.Frame):
         helpMenu = wx.Menu() 
         helpMenu.Append(wx.MenuItem(
             helpMenu,
-            wx.ID_OPEN,
+            MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID,
             text = "Open shortcuts folder",
             kind = wx.ITEM_NORMAL))
         helpMenu.AppendSeparator()
         helpMenu.Append(wx.MenuItem(
             helpMenu,
-            wx.ID_ABOUT,
+            MENU_ITEM_ABOUT_ID,
             text = "About",
             kind = wx.ITEM_NORMAL))
         helpMenu.Append(wx.MenuItem(
             helpMenu,
-            wx.ID_EXIT,
+            MENU_ITEM_EXIT_ID,
             text = "Exit",
             kind = wx.ITEM_NORMAL))
         menuBar.Append(helpMenu, 'Help')
@@ -121,12 +128,19 @@ class MyFrame(wx.Frame):
             wx.OK | wx.ICON_INFORMATION)
 
     def onHandleMenuBar(self, event):
-        event_id = event.GetId() 
-        if event_id == wx.ID_OPEN: 
-            subprocess.run(['explorer.exe', ensure_shortcuts_folder()])
-        elif event_id == wx.ID_ABOUT:
-            subprocess.run(['explorer.exe', "https://github.com/sekai-soft/code-launcher"])
-        elif event_id == wx.ID_EXIT:
+        event_id = event.GetId()
+        if platform.system() == 'Windows':
+            opener = 'explorer.exe'
+        elif platform.system() == 'Darwin':
+            opener = 'open'
+        else:
+            raise UnsupportedOSException()
+
+        if event_id == MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID: 
+            subprocess.run([opener, ensure_shortcuts_folder()])
+        elif event_id == MENU_ITEM_ABOUT_ID:
+            subprocess.run([opener, "https://github.com/sekai-soft/code-launcher"])
+        elif event_id == MENU_ITEM_EXIT_ID:
             self.onClose(event)
 
     def onClose(self, event):

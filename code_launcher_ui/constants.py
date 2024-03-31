@@ -1,18 +1,20 @@
 import platform
+import os
 from .exception import CodeLauncherUiException
 from code_launcher.parse_vscode_uri import VscodeProjectType
 
+ASSETS_FOLDER = 'assets' + os.sep
 
-APP_ICON = 'icon.ico'
+APP_ICON = ASSETS_FOLDER + 'icon.ico'
 if platform.system() == 'Darwin':
-    MENU_BAR_ICON = 'icon_mac_menu_bar.ico'
+    MENU_BAR_ICON = ASSETS_FOLDER + 'icon_mac_menu_bar.ico'
 else:
-    MENU_BAR_ICON = 'icon.ico'
+    MENU_BAR_ICON = ASSETS_FOLDER + 'icon.ico'
 APP_NAME = 'Code Launcher'
 
-LOCAL_PROJECT_ICON = 'local.ico'
-WSL_PROJECT_ICON = 'wsl.ico'
-DEV_CONTAINER_PROJECT_ICON = 'dev-container.ico'
+LOCAL_PROJECT_ICON = ASSETS_FOLDER + 'local.ico'
+WSL_PROJECT_ICON = ASSETS_FOLDER + 'wsl.ico'
+DEV_CONTAINER_PROJECT_ICON = ASSETS_FOLDER + 'dev-container.ico'
 
 if platform.system() == 'Windows':
     SYNC_TO_OS_BUTTON_LABEL = "Sync to Start menu"

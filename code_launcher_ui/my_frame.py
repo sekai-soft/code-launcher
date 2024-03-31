@@ -6,6 +6,7 @@ from code_launcher.read_vscode_state import read_vscode_state
 from code_launcher.parse_vscode_uri import parse_vscode_uri
 from code_launcher.find_vscode import find_vscode_exe_path
 from code_launcher.reconcile import reconcile
+from code_launcher.ensure_shortcuts_folder import ensure_shortcuts_folder
 
 
 class MyFrame(wx.Frame):
@@ -20,10 +21,32 @@ class MyFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.onClose)
         self.Bind(wx.EVT_ICONIZE, self.onMinimize)
 
-        self.render()
+        self.renderMainUI()
         self.Show()
 
-    def render(self):
+        menuBar = wx.MenuBar() 
+        helpMenu = wx.Menu() 
+        helpMenu.Append(wx.MenuItem(
+            helpMenu,
+            wx.ID_OPEN,
+            text = "Open shortcuts folder",
+            kind = wx.ITEM_NORMAL))
+        helpMenu.AppendSeparator()
+        helpMenu.Append(wx.MenuItem(
+            helpMenu,
+            wx.ID_ABOUT,
+            text = "About",
+            kind = wx.ITEM_NORMAL))
+        helpMenu.Append(wx.MenuItem(
+            helpMenu,
+            wx.ID_EXIT,
+            text = "Exit",
+            kind = wx.ITEM_NORMAL))
+        menuBar.Append(helpMenu, 'Help')
+        self.Bind(wx.EVT_MENU, self.onHandleMenuBar) 
+        self.SetMenuBar(menuBar) 
+
+    def renderMainUI(self):
         vscode_projects = map(parse_vscode_uri, read_vscode_state())
         vscode_projects = sorted(vscode_projects, key=lambda p: p.inferred_project_name)
         self.sizer.AddSpacer(8)
@@ -40,9 +63,9 @@ class MyFrame(wx.Frame):
         header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(4)
 
-        header_explain_button_height = header_sync_button.GetSize().height
+        header_sync_button_height = header_sync_button.GetSize().height
         header_explain_button = wx.Button(self.panel, label='?')
-        header_explain_button.SetMinSize(wx.Size(header_explain_button_height, header_explain_button_height))
+        header_explain_button.SetMinSize(wx.Size(header_sync_button_height, header_sync_button_height))
         header_explain_button.Bind(wx.EVT_BUTTON, self.onExplain)
         header_sizer.Add(header_explain_button, flag=wx.ALIGN_CENTER_VERTICAL)
         self.sizer.Add(header_sizer)
@@ -96,6 +119,15 @@ class MyFrame(wx.Frame):
             SYNC_EXPLAINATION,
             f'What is "{SYNC_BUTTON_LABEL}"?',
             wx.OK | wx.ICON_INFORMATION)
+
+    def onHandleMenuBar(self, event):
+        event_id = event.GetId() 
+        if event_id == wx.ID_OPEN: 
+            subprocess.run(['explorer.exe', ensure_shortcuts_folder()])
+        elif event_id == wx.ID_ABOUT:
+            subprocess.run(['explorer.exe', "https://github.com/sekai-soft/code-launcher"])
+        elif event_id == wx.ID_EXIT:
+            self.onClose(event)
 
     def onClose(self, event):
         self.taskBarIcon.RemoveIcon()

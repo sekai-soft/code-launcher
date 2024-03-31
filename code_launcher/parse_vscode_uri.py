@@ -47,6 +47,7 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
         decoded_path = unquote(parsed_uri.path)
         inferred_project_name = decoded_path.split('/')[-1]
         url = get_url_for_file_project(decoded_path)
+
     elif parsed_uri.scheme == 'vscode-remote':
         decoded_netloc = unquote(parsed_uri.netloc)
         inferred_project_name = parsed_uri.path.split('/')[-1]
@@ -59,6 +60,7 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
             url = 'dev-container'
         else:
             raise CodeLauncherException(f"Unknown vscode-remote netloc type: {decoded_netloc}")
+
     else:
         raise CodeLauncherException(f"Unknown vscode uri scheme: {parsed_uri.scheme}")
 

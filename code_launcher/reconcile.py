@@ -1,10 +1,7 @@
-from typing import Callable
-from dataclasses import dataclass
 from .create_vscode_shortcut import create_vscode_shortcut
 from .list_vscode_shortcuts import list_vscode_shortcuts
 from .delete_vscode_shortcut import delete_vscode_shortcut    
 from .read_vscode_state import read_vscode_state
-from .parse_vscode_uri import parse_vscode_uri
 
 
 def reconcile():
@@ -25,9 +22,6 @@ def reconcile():
             deleted_folder_uris.append(existing_shortcut)
     for added_folder_uri in added_folder_uris:
         # TODO: duplicate workspace names?
-        create_vscode_shortcut(
-            added_folder_uri,
-            parse_vscode_uri(added_folder_uri).inferred_project_name,
-        )
+        create_vscode_shortcut(added_folder_uri)
     for deleted_folder_uri in deleted_folder_uris:
         delete_vscode_shortcut(deleted_folder_uri)

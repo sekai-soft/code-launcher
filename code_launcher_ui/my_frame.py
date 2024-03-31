@@ -1,13 +1,13 @@
 import wx
 import subprocess
 import platform
-from .constants import APP_ICON, APP_NAME, SYNC_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
+from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.exception import UnsupportedOSException
 from code_launcher.read_vscode_state import read_vscode_state
-from code_launcher.parse_vscode_uri import parse_vscode_uri
 from code_launcher.find_vscode import find_vscode_exe_path
 from code_launcher.reconcile import reconcile
+from code_launcher.diff import diff
 from code_launcher.ensure_shortcuts_folder import ensure_shortcuts_folder
 
 
@@ -65,14 +65,30 @@ class MyFrame(wx.Frame):
         header_sizer.Add(header_project_count_text, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(8)
 
-        header_sync_button = wx.Button(self.panel, label=SYNC_BUTTON_LABEL)
-        header_sync_button.Bind(wx.EVT_BUTTON, self.onSync)
-        header_sizer.Add(header_sync_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        header_sync_from_vscode_button = wx.Button(self.panel, label="Sync from VSCode")
+        header_sync_from_vscode_button.Bind(wx.EVT_BUTTON, self.onSyncFromVSCode)
+        header_sizer.Add(header_sync_from_vscode_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        header_sizer.AddSpacer(4)
+        header_button_height = header_sync_from_vscode_button.GetSize().height
+
+        _diff = diff()
+        if _diff.is_empty():
+            header_sync_to_os_label = SYNC_TO_OS_BUTTON_LABEL
+        elif _diff.adding_and_deleting():
+            header_sync_to_os_label = SYNC_TO_OS_BUTTON_LABEL + f' (+{len(_diff.adding_shortcuts)}, -{len(_diff.deleting_shortcuts)})'
+        elif _diff.adding_only():
+            header_sync_to_os_label = SYNC_TO_OS_BUTTON_LABEL + f' (+{len(_diff.adding_shortcuts)})'
+        else:
+            header_sync_to_os_label = SYNC_TO_OS_BUTTON_LABEL + f' (-{len(_diff.deleting_shortcuts)})'
+        header_sync_to_os_button = wx.Button(self.panel, label=header_sync_to_os_label)
+        if _diff.is_empty():
+            header_sync_to_os_button.Disable()
+        header_sync_to_os_button.Bind(wx.EVT_BUTTON, self.onSyncToOS)
+        header_sizer.Add(header_sync_to_os_button, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(4)
 
-        header_sync_button_height = header_sync_button.GetSize().height
         header_explain_button = wx.Button(self.panel, label='?')
-        header_explain_button.SetMinSize(wx.Size(header_sync_button_height, header_sync_button_height))
+        header_explain_button.SetMinSize(wx.Size(header_button_height, header_button_height))
         header_explain_button.Bind(wx.EVT_BUTTON, self.onExplain)
         header_sizer.Add(header_explain_button, flag=wx.ALIGN_CENTER_VERTICAL)
         self.sizer.Add(header_sizer)
@@ -118,13 +134,19 @@ class MyFrame(wx.Frame):
     def onLaunchVscodeProject(self, event, project_uri: str):
         subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri])
 
-    def onSync(self, event):
-        reconcile()
+    def onSyncFromVSCode(self, event):
+        self.sizer.Clear(True)
+        self.renderMainUI()
+        self.sizer.Layout()
+
+    def onSyncToOS(self, event):
+        reconcile(diff())
+        self.onSyncFromVSCode(event)
 
     def onExplain(self, event):
         wx.MessageBox(
             SYNC_EXPLAINATION,
-            f'What is "{SYNC_BUTTON_LABEL}"?',
+            f'What is "{SYNC_TO_OS_BUTTON_LABEL}"?',
             wx.OK | wx.ICON_INFORMATION)
 
     def onHandleMenuBar(self, event):

@@ -15,9 +15,9 @@ WSL_PROJECT_ICON = 'wsl.ico'
 DEV_CONTAINER_PROJECT_ICON = 'dev-container.ico'
 
 if platform.system() == 'Windows':
-    SYNC_BUTTON_LABEL = "Sync to Start menu"
+    SYNC_TO_OS_BUTTON_LABEL = "Sync to Start menu"
 elif platform.system() == 'Darwin':
-    SYNC_BUTTON_LABEL = "Sync to ~/Applications"
+    SYNC_TO_OS_BUTTON_LABEL = "Sync to ~/Applications"
 
 if platform.system() == 'Windows':
     SYNC_EXPLAINATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run."""

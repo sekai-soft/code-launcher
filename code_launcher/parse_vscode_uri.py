@@ -20,7 +20,10 @@ class ParsedVscodeProject:
     # in case there is a conflict in inferred_project_name
     unique_project_identifier: str
     url: str
-    uri: str
+    folder_uri: str
+
+    def unique_project_name(self):
+        return f"{self.inferred_project_name}-{self.project_type.name}-{self.unique_project_identifier}"
 
 
 def _compute_url_for_file_project(path: str) -> str:

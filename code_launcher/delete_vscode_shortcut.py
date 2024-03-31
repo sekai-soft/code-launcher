@@ -2,7 +2,6 @@ import os
 import platform
 import shutil
 from .ensure_shortcuts_folder import ensure_shortcuts_folder
-from .parse_vscode_uri import parse_vscode_uri
 from .exception import UnsupportedOSException
 
 
@@ -21,10 +20,11 @@ def delete_vscode_shortcut(folder_uri: str):
         return
 
     elif platform.system() == 'Darwin':
-        inferred_project_name = parse_vscode_uri(folder_uri).inferred_project_name
-        app_folder = os.path.join(ensure_shortcuts_folder(), inferred_project_name + '.app')
-        if os.path.exists(app_folder):
-            shutil.rmtree(app_folder)
+        for app_folder in os.listdir(ensure_shortcuts_folder()):
+            if app_folder.endswith('.app'):
+                with open(os.path.join(ensure_shortcuts_folder(), app_folder, 'Contents', 'MacOS', 'script.sh'), 'r') as f:
+                    if f.read().endswith(f"--folder-uri {folder_uri}"):
+                        shutil.rmtree(os.path.join(ensure_shortcuts_folder(), app_folder))
         return
 
     raise UnsupportedOSException()

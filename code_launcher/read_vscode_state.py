@@ -4,6 +4,7 @@ import sqlite3
 import platform
 from typing import List
 from .exception import CodeLauncherException, UnsupportedOSException
+from .parse_vscode_uri import parse_vscode_uri, ParsedVscodeProject
 
 
 def parse_vscode_state(value: str) -> List[str]:
@@ -33,7 +34,7 @@ def get_vscode_state_path() -> str:
     raise UnsupportedOSException()
 
 
-def read_vscode_state() -> List[str]:
+def read_vscode_state() -> List[ParsedVscodeProject]:
     p = get_vscode_state_path()
     if not os.path.exists(p):
         raise CodeLauncherException("VSCode state file is not found")
@@ -44,5 +45,5 @@ def read_vscode_state() -> List[str]:
     conn.close()
     for (key, value) in state:
         if key == "history.recentlyOpenedPathsList":
-            return parse_vscode_state(value)
+            return list(map(parse_vscode_uri, parse_vscode_state(value)))
     raise CodeLauncherException("VSCode state file does not contain history.recentlyOpenedPathsList")

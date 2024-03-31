@@ -5,7 +5,7 @@ from .ensure_shortcuts_folder import ensure_shortcuts_folder
 
 def create_vscode_shortcut(folder_uri: str, workspace_name: str):
     pylnk3.for_file(
-        rf"{find_vscode_bin_path()}",
+        rf"{find_vscode_exe_path()}",
         rf"{os.path.join(ensure_shortcuts_folder(), workspace_name + '.lnk')}",
         arguments=rf"--folder-uri {folder_uri}",
         description=rf"Opens {workspace_name} in VSCode",

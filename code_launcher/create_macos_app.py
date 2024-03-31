@@ -9,13 +9,8 @@ from .exception import CodeLauncherException
 
 
 def hash_string(input_string):
-    hash_object = hashlib.sha256(input_string.encode())
-    hex_dig = hash_object.hexdigest()
-    b64_string = base64.b64encode(bytes.fromhex(hex_dig)).decode()
-    return b64_string.replace('+', '').replace('/', '')
-
-
-print(hash_string("your string here"))
+    input_string = input_string.lower().strip()  
+    return hashlib.sha256(input_string.encode("utf-8")).hexdigest()
 
 
 INFO_PLIST = '''<?xml version="1.0" encoding="UTF-8"?>
@@ -45,7 +40,8 @@ INFO_PLIST = '''<?xml version="1.0" encoding="UTF-8"?>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 </dict>
-</plist>'''
+</plist>
+'''
 
 
 def create_macos_app(app_name: str, bash_script: str):

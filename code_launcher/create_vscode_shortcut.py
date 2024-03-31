@@ -25,7 +25,8 @@ def create_vscode_shortcut(folder_uri: str):
     elif platform.system() == 'Darwin':
         create_macos_app(
             inferred_project_name,
-            find_vscode_exe_path().replace(" ", "\ ") + " --folder-uri " + folder_uri)
+            # shebang is important here otherwise macOS won't be able to recognize the .app bundle as executable
+            "#!/bin/bash\n" + find_vscode_exe_path().replace(" ", "\ ") + " --folder-uri " + folder_uri)
         return
 
     raise UnsupportedOSException()

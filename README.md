@@ -6,8 +6,7 @@ Jetbrains Toolbox for VSCode!
 ### Package app on Windows
 ```
 .\venv\Scripts\activate.bat
-pyinstaller --name "Code Launcher" --windowed --icon assets\icon.ico --clean .\app.py
-cp assets "dist\Code Launcher" -Recurse
+pyinstaller --name "Code Launcher" --windowed --icon assets\icon.ico --add-data "assets:." --clean .\app.py
 ```
 
 Then find the built app in `dist` folder

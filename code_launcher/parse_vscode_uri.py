@@ -11,6 +11,7 @@ class VscodeProjectType(Enum):
     Local = 1
     WSL = 2
     DevContainer = 3
+    SshRemote = 4
 
 
 @dataclass
@@ -82,6 +83,14 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
             dev_container_hash = decoded_netloc[len('dev-container+'):]
             unique_project_identifier = dev_container_hash[:8]
             url = 'dev-container'
+        elif decoded_netloc.startswith('ssh-remote+'):
+            decoded_path = unquote(parsed_uri.path)
+            project_type = VscodeProjectType.SshRemote
+            ssh_ip = decoded_netloc[len('ssh-remote+'):]
+            # url will look weird for Windows SSH remotes but we can't tell the remote OS
+            url = ssh_ip + ":" + decoded_path
+            unique_project_identifier = _decoded_path_as_safe_filename(url)
+            
         else:
             raise CodeLauncherException(f"Unknown vscode-remote netloc type: {decoded_netloc}")
 

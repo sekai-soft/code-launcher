@@ -25,6 +25,7 @@ APP_NAME = 'Code Launcher'
 LOCAL_PROJECT_ICON = asset_file('local.ico')
 WSL_PROJECT_ICON = asset_file('wsl.ico')
 DEV_CONTAINER_PROJECT_ICON = asset_file('dev-container.ico')
+SSH_REMOTE_PROJECT_ICON = asset_file('ssh-remote.ico')
 
 if platform.system() == 'Windows':
     SYNC_TO_OS_BUTTON_LABEL = "Sync to Start menu"
@@ -43,5 +44,6 @@ def project_type_to_icon(project_type) -> str:
         return WSL_PROJECT_ICON
     elif project_type == VscodeProjectType.DevContainer:
         return DEV_CONTAINER_PROJECT_ICON
-    else:
-        raise CodeLauncherUiException(f"Unknown project type: {project_type}")
+    elif project_type == VscodeProjectType.SshRemote:
+        return SSH_REMOTE_PROJECT_ICON
+    raise CodeLauncherUiException(f"Unknown project type: {project_type}")

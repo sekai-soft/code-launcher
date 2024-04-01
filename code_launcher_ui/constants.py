@@ -44,8 +44,6 @@ if platform.system() == 'Darwin' and is_macos_dark_mode():
     LOCAL_PROJECT_ICON = asset_file('local_macos_dark.ico')
 
 WSL_PROJECT_ICON = asset_file('wsl.ico')
-if platform.system() == 'Darwin' and is_macos_dark_mode():
-    WSL_PROJECT_ICON = asset_file('wsl_macos_dark.ico')
 
 DEV_CONTAINER_PROJECT_ICON = asset_file('dev-container.ico')
 if platform.system() == 'Darwin' and is_macos_dark_mode():

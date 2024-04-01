@@ -26,19 +26,12 @@ class MyFrame(wx.Frame):
     def __init__(self):
         self.defaultFont = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, DEFAULT_FONT_FAMILY)
         self.defaultFontBold = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, DEFAULT_FONT_FAMILY)
+
         wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800))
         self.taskBarIcon = MyTaskBarIcon(self)
-        self.panel = wx.Panel(self)
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.panel.SetSizer(self.sizer)
-        self.panel.SetFont(self.defaultFont)
-
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)
         self.Bind(wx.EVT_ICONIZE, self.onMinimize)
-
-        self.renderMainUI()
-        self.Show()
 
         menuBar = wx.MenuBar() 
         helpMenu = wx.Menu() 
@@ -60,7 +53,13 @@ class MyFrame(wx.Frame):
             kind = wx.ITEM_NORMAL))
         menuBar.Append(helpMenu, 'Help')
         self.Bind(wx.EVT_MENU, self.onHandleMenuBar) 
-        self.SetMenuBar(menuBar) 
+        self.SetMenuBar(menuBar)
+
+        self.panel = wx.Panel(self)
+        self.panel.SetFont(self.defaultFont)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.panel.SetSizer(self.sizer)
+        self.renderMainUI()
 
     def renderMainUI(self):
         vscode_projects = read_vscode_state()

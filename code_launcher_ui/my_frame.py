@@ -1,7 +1,7 @@
 import wx
 import subprocess
 import platform
-from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon, FONT
+from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.exception import UnsupportedOSException
 from code_launcher.read_vscode_state import read_vscode_state
@@ -18,9 +18,8 @@ MENU_ITEM_EXIT_ID = 3
 
 class MyFrame(wx.Frame):
     def __init__(self):
-        wx.Font.AddPrivateFont(FONT)
-        self.defaultFont = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, 'Fira Code')
-        self.defaultFontBold = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, 'Fira Code')
+        self.defaultFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, 'Menlo')
+        self.defaultFontBold = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, 'Menlo')
         wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800))
         self.taskBarIcon = MyTaskBarIcon(self)
         self.panel = wx.Panel(self)

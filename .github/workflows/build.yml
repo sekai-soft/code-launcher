@@ -51,6 +51,8 @@ jobs:
       - name: Build with PyInstaller
         run: |
           pyinstaller --name "Code Launcher" --windowed --icon assets/icon.ico --add-data "assets:." --clean --noconfirm ./app.py
+          rm -rf "./dist/Code Launcher"
+          chmod +x "./dist/Code Launcher.app/Contents/MacOS/Code Launcher"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2

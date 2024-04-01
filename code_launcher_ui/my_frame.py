@@ -1,7 +1,7 @@
 import wx
 import subprocess
 import platform
-from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
+from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon, FONT
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.exception import UnsupportedOSException
 from code_launcher.read_vscode_state import read_vscode_state
@@ -18,11 +18,13 @@ MENU_ITEM_EXIT_ID = 3
 
 class MyFrame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None, title=APP_NAME, size=(384, 683))
+        wx.Font.AddPrivateFont(FONT)
+        wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800))
         self.taskBarIcon = MyTaskBarIcon(self)
         self.panel = wx.Panel(self)
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.panel.SetSizer(self.sizer)
+        self.panel.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, 'Fira Code'))
 
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)
@@ -61,7 +63,7 @@ class MyFrame(wx.Frame):
         header_sizer = wx.BoxSizer(wx.HORIZONTAL)
         header_sizer.AddSpacer(8)
         header_project_count_text = wx.StaticText(self.panel, label=f'{len(vscode_projects)} projects')
-        header_project_count_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
+        # header_project_count_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
         header_sizer.Add(header_project_count_text, flag=wx.ALIGN_CENTER_VERTICAL)
         header_sizer.AddSpacer(8)
 
@@ -115,13 +117,13 @@ class MyFrame(wx.Frame):
             project_texts_sizer = wx.BoxSizer(wx.VERTICAL)
 
             project_name_text = wx.StaticText(self.panel, label=vscode_project.inferred_project_name)
-            project_name_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD))
+            # project_name_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD))
             project_name_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_name_text.Bind(wx.EVT_LEFT_DOWN, lambda event, uri=vscode_project.folder_uri: self.onLaunchVscodeProject(event, uri))
             project_texts_sizer.Add(project_name_text)
 
             project_path_text = wx.StaticText(self.panel, label=vscode_project.url)
-            project_path_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
+            # project_path_text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL))
             project_path_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_path_text.Bind(wx.EVT_LEFT_DOWN, lambda event, uri=vscode_project.folder_uri: self.onLaunchVscodeProject(event, uri))
             project_texts_sizer.Add(project_path_text)

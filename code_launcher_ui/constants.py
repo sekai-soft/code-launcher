@@ -15,6 +15,9 @@ def asset_file(relative_file):
      return os.path.join(os.path.abspath("."), DEV_ASSETS_FOLDER, relative_file)
 
 
+FONT = asset_file('FiraCode-Regular.ttf')
+
+
 APP_ICON = asset_file('icon.ico')
 if platform.system() == 'Darwin':
     MENU_BAR_ICON = asset_file('icon_mac_menu_bar.ico')

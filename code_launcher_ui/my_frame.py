@@ -137,6 +137,8 @@ class MyFrame(wx.Frame):
 
             self.sizer.Add(project_sizer)
             self.sizer.AddSpacer(16)
+            # added to prevent refreshing UI causing texts overlapping, don't know why though :(
+            self.sizer.Layout()
     
     def onLaunchVscodeProject(self, event, project_uri: str):
         subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri])
@@ -144,7 +146,6 @@ class MyFrame(wx.Frame):
     def onSyncFromVSCode(self, event):
         self.sizer.Clear(True)
         self.renderMainUI()
-        self.sizer.Layout()
 
     def onSyncToOS(self, event):
         reconcile(diff())

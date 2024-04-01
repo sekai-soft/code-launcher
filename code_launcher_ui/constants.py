@@ -61,9 +61,9 @@ elif platform.system() == 'Darwin':
     SYNC_TO_OS_BUTTON_LABEL = "Sync to ~/Applications"
 
 if platform.system() == 'Windows':
-    SYNC_EXPLANATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run."""
+    SYNC_EXPLANATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu, or PowerToys Run."""
 elif platform.system() == 'Darwin':
-    SYNC_EXPLANATION = """Synchronizes your VSCode projects as apps to the ~/Applications folder so that you can launch them quickly in Spotlight."""
+    SYNC_EXPLANATION = """Synchronizes your VSCode projects as apps to the ~/Applications folder so that you can launch them quickly in Spotlight, Alfred, or Raycast"""
 
 def project_type_to_icon(project_type) -> str:
     if project_type == VscodeProjectType.Local:

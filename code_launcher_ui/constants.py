@@ -25,10 +25,11 @@ elif platform.system() == 'Darwin':
     DEFAULT_FONT_FAMILY = 'Menlo'
 
 APP_ICON = asset_file('icon.ico')
+
+MENU_BAR_ICON = asset_file('icon.ico')
 if platform.system() == 'Darwin':
-    MENU_BAR_ICON = asset_file('icon_mac_menu_bar.ico')
-else:
-    MENU_BAR_ICON = asset_file('icon.ico')
+    MENU_BAR_ICON = asset_file('icon_macos_menubar.ico')
+
 APP_NAME = 'Code Launcher'
 
 LOCAL_PROJECT_ICON = asset_file('local.ico')

@@ -16,6 +16,12 @@ MENU_ITEM_ABOUT_ID = 2
 MENU_ITEM_EXIT_ID = 3
 
 
+def scale_bitmap(bitmap, width, height):
+    image = wx.Bitmap.ConvertToImage(bitmap)
+    image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
+    return wx.Bitmap(image)
+
+
 class MyFrame(wx.Frame):
     def __init__(self):
         self.defaultFont = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, DEFAULT_FONT_FAMILY)
@@ -100,10 +106,11 @@ class MyFrame(wx.Frame):
             project_sizer = wx.BoxSizer(wx.HORIZONTAL)
             project_sizer.AddSpacer(8)
 
-            project_icon_image = wx.StaticBitmap(
-                self.panel,
-                bitmap=wx.Bitmap(
-                    project_type_to_icon(vscode_project.project_type)))
+            project_icon_bitmap = scale_bitmap(
+                wx.Bitmap(project_type_to_icon(vscode_project.project_type)),
+                32,
+                32)
+            project_icon_image = wx.StaticBitmap(self.panel, -1, project_icon_bitmap)
             project_icon_image.SetSize((32, 32))
             project_icon_image.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             # The issue you're experiencing is a common pitfall with Python's closures and late binding.

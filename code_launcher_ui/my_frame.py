@@ -1,7 +1,7 @@
 import wx
 import subprocess
 import platform
-from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLAINATION, project_type_to_icon
+from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLANATION, project_type_to_icon, DEFAULT_FONT_SIZE, DEFAULT_FONT_FAMILY
 from .my_task_bar_icon import MyTaskBarIcon
 from code_launcher.exception import UnsupportedOSException
 from code_launcher.read_vscode_state import read_vscode_state
@@ -18,8 +18,8 @@ MENU_ITEM_EXIT_ID = 3
 
 class MyFrame(wx.Frame):
     def __init__(self):
-        self.defaultFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, 'Menlo')
-        self.defaultFontBold = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, 'Menlo')
+        self.defaultFont = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, DEFAULT_FONT_FAMILY)
+        self.defaultFontBold = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, DEFAULT_FONT_FAMILY)
         wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800))
         self.taskBarIcon = MyTaskBarIcon(self)
         self.panel = wx.Panel(self)
@@ -146,7 +146,7 @@ class MyFrame(wx.Frame):
 
     def onExplain(self, event):
         wx.MessageBox(
-            SYNC_EXPLAINATION,
+            SYNC_EXPLANATION,
             f'What is "{SYNC_TO_OS_BUTTON_LABEL}"?',
             wx.OK | wx.ICON_INFORMATION)
 

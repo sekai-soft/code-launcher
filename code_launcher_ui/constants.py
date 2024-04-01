@@ -14,6 +14,15 @@ def asset_file(relative_file):
          return os.path.join(sys._MEIPASS, relative_file)
      return os.path.join(os.path.abspath("."), DEV_ASSETS_FOLDER, relative_file)
 
+if platform.system() == 'Windows':
+    DEFAULT_FONT_SIZE = 10
+elif platform.system() == 'Darwin':
+    DEFAULT_FONT_SIZE = 12
+
+if platform.system() == 'Windows':
+    DEFAULT_FONT_FAMILY = 'Consolas'
+elif platform.system() == 'Darwin':
+    DEFAULT_FONT_FAMILY = 'Menlo'
 
 APP_ICON = asset_file('icon.ico')
 if platform.system() == 'Darwin':
@@ -33,9 +42,9 @@ elif platform.system() == 'Darwin':
     SYNC_TO_OS_BUTTON_LABEL = "Sync to ~/Applications"
 
 if platform.system() == 'Windows':
-    SYNC_EXPLAINATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run."""
+    SYNC_EXPLANATION = """Synchronizes your VSCode projects as shortcuts to the Start menu so that you can launch them quickly in Start menu or PowerToys Run."""
 elif platform.system() == 'Darwin':
-    SYNC_EXPLAINATION = """Synchronizes your VSCode projects as apps to the ~/Applications folder so that you can launch them quickly in Spotlight."""
+    SYNC_EXPLANATION = """Synchronizes your VSCode projects as apps to the ~/Applications folder so that you can launch them quickly in Spotlight."""
 
 def project_type_to_icon(project_type) -> str:
     if project_type == VscodeProjectType.Local:

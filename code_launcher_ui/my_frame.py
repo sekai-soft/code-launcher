@@ -55,7 +55,8 @@ class MyFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onHandleMenuBar) 
         self.SetMenuBar(menuBar)
 
-        self.panel = wx.Panel(self)
+        self.panel = wx.ScrolledWindow(self)
+        self.panel.SetScrollRate(5, 5)
         self.panel.SetFont(self.defaultFont)
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.panel.SetSizer(self.sizer)

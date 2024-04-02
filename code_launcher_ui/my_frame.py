@@ -27,7 +27,7 @@ class MyFrame(wx.Frame):
         self.defaultFont = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, DEFAULT_FONT_FAMILY)
         self.defaultFontBold = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, DEFAULT_FONT_FAMILY)
 
-        wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800))
+        wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
         self.taskBarIcon = MyTaskBarIcon(self)
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)

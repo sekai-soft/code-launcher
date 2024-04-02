@@ -10,10 +10,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.12
       
@@ -27,7 +27,7 @@ jobs:
           pyinstaller --name "Code Launcher" --windowed --icon assets\icon.ico --add-data "assets:." --clean --noconfirm .\app.py
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: dist/*
@@ -36,10 +36,10 @@ jobs:
     runs-on: macos-14
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.12
       
@@ -55,7 +55,7 @@ jobs:
           zip -r9 "Code Launcher" "Code Launcher.app/"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: mac-arm
           path: dist/Code Launcher.zip

@@ -27,7 +27,7 @@ class MyFrame(wx.Frame):
         self.defaultFont = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, DEFAULT_FONT_FAMILY)
         self.defaultFontBold = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, DEFAULT_FONT_FAMILY)
 
-        wx.Frame.__init__(self, None, title=APP_NAME, size=(600, 800), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
+        wx.Frame.__init__(self, None, title=APP_NAME, size=(384, 683), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
         self.taskBarIcon = MyTaskBarIcon(self)
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)
@@ -67,16 +67,13 @@ class MyFrame(wx.Frame):
         vscode_projects = sorted(vscode_projects, key=lambda p: (p.inferred_project_name, p.unique_project_identifier))
         self.sizer.AddSpacer(8)
 
-        header_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        header_sizer.AddSpacer(8)
-        header_project_count_text = wx.StaticText(self.panel, label=f'{len(vscode_projects)} projects')
-        header_sizer.Add(header_project_count_text, flag=wx.ALIGN_CENTER_VERTICAL)
-        header_sizer.AddSpacer(8)
+        header_controls_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        header_controls_sizer.AddSpacer(8)
 
         header_sync_from_vscode_button = wx.Button(self.panel, label="Sync from VSCode")
         header_sync_from_vscode_button.Bind(wx.EVT_BUTTON, self.onSyncFromVSCode)
-        header_sizer.Add(header_sync_from_vscode_button, flag=wx.ALIGN_CENTER_VERTICAL)
-        header_sizer.AddSpacer(4)
+        header_controls_sizer.Add(header_sync_from_vscode_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        header_controls_sizer.AddSpacer(4)
         header_button_height = header_sync_from_vscode_button.GetSize().height
 
         _diff = diff()
@@ -92,16 +89,24 @@ class MyFrame(wx.Frame):
         if _diff.is_empty():
             header_sync_to_os_button.Disable()
         header_sync_to_os_button.Bind(wx.EVT_BUTTON, self.onSyncToOS)
-        header_sizer.Add(header_sync_to_os_button, flag=wx.ALIGN_CENTER_VERTICAL)
-        header_sizer.AddSpacer(4)
+        header_controls_sizer.Add(header_sync_to_os_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        header_controls_sizer.AddSpacer(4)
 
         header_explain_button = wx.Button(self.panel, label='?')
         header_explain_button.SetMinSize(wx.Size(header_button_height, header_button_height))
         header_explain_button.Bind(wx.EVT_BUTTON, self.onExplain)
-        header_sizer.Add(header_explain_button, flag=wx.ALIGN_CENTER_VERTICAL)
-        self.sizer.Add(header_sizer)
-
+        header_controls_sizer.Add(header_explain_button, flag=wx.ALIGN_CENTER_VERTICAL)
+        self.sizer.Add(header_controls_sizer)
         self.sizer.AddSpacer(8)
+
+        header_text_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        header_text_sizer.AddSpacer(8)
+
+        header_project_count_text = wx.StaticText(self.panel, label=f'{len(vscode_projects)} projects')
+        header_text_sizer.Add(header_project_count_text, flag=wx.ALIGN_CENTER_VERTICAL)
+        self.sizer.Add(header_text_sizer)
+        self.sizer.AddSpacer(8)
+
         for vscode_project in vscode_projects:
             project_sizer = wx.BoxSizer(wx.HORIZONTAL)
             project_sizer.AddSpacer(8)

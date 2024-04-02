@@ -48,6 +48,21 @@ def _compute_url_for_file_project(path: str) -> str:
     raise UnsupportedOSException()
 
 
+def _compute_url_for_remote_project(path: str) -> str:
+    if path.startswith('/home'):
+        username = path.split('/')[2]
+        return f"~/{path[len(f'/home/{username}'):].lstrip('/')}"
+    if path.startswith('/root'):
+        return f"~/{path[len('/root'):].lstrip('/')}"
+    if path.startswith('/mnt/c/Users'):
+        username = path.split('/')[3]
+        return f"~/{path[len(f'/mnt/c/Users/{username}'):].lstrip('/')}"
+    if path.startswith('/c/Users'):
+        username = path.split('/')[2]
+        return f"~/{path[len(f'/c/Users/{username}'):].lstrip('/')}"
+    return path
+
+
 def _decoded_path_as_safe_filename(decoded_path: str) -> str:
         # For Windows (& macOS because it replaces forward slashes already)
         res = re.sub(r'[\\/*?:"<>|]', '_', decoded_path)  # replace reserved characters with underscore
@@ -76,7 +91,7 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
             decoded_path = unquote(parsed_uri.path)
             project_type = VscodeProjectType.WSL
             wsl_name = decoded_netloc[len('wsl+'):]
-            url = wsl_name + ":"  + decoded_path
+            url = wsl_name + ":"  + _compute_url_for_remote_project(decoded_path)
             unique_project_identifier = _decoded_path_as_safe_filename(url)
         elif decoded_netloc.startswith('dev-container+'):
             project_type = VscodeProjectType.DevContainer
@@ -87,8 +102,7 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
             decoded_path = unquote(parsed_uri.path)
             project_type = VscodeProjectType.SshRemote
             ssh_ip = decoded_netloc[len('ssh-remote+'):]
-            # url will look weird for Windows SSH remotes but we can't tell the remote OS
-            url = ssh_ip + ":" + decoded_path
+            url = ssh_ip + ":" + _compute_url_for_remote_project(decoded_path)
             unique_project_identifier = _decoded_path_as_safe_filename(url)
             
         else:

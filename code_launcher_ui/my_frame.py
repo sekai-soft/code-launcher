@@ -15,7 +15,7 @@ MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID = 1
 MENU_ITEM_ABOUT_ID = 2
 MENU_ITEM_EXIT_ID = 3
 WINDOW_WIDTH = 384
-TEXT_CUTOFF_THRESHOLD = WINDOW_WIDTH - 20
+TEXT_CUTOFF_THRESHOLD_WIDTH = 312
 TEXT_CUTOFF_LENGTH = 39
 
 
@@ -132,7 +132,7 @@ class MyFrame(wx.Frame):
             project_texts_sizer = wx.BoxSizer(wx.VERTICAL)
 
             project_name_text = wx.StaticText(self.panel, label=vscode_project.inferred_project_name)
-            if project_name_text.GetSize().width > TEXT_CUTOFF_THRESHOLD:
+            if project_name_text.GetSize().width > TEXT_CUTOFF_THRESHOLD_WIDTH:
                 project_name_text.SetLabel(vscode_project.inferred_project_name[:TEXT_CUTOFF_LENGTH] + '...')
             project_name_text.SetToolTip(vscode_project.inferred_project_name)
             project_name_text.SetFont(self.defaultFontBold)
@@ -141,7 +141,7 @@ class MyFrame(wx.Frame):
             project_texts_sizer.Add(project_name_text)
 
             project_path_text = wx.StaticText(self.panel, label=vscode_project.url)
-            if project_path_text.GetSize().width > TEXT_CUTOFF_THRESHOLD:
+            if project_path_text.GetSize().width > TEXT_CUTOFF_THRESHOLD_WIDTH:
                 project_path_text.SetLabel(vscode_project.url[:TEXT_CUTOFF_LENGTH] + '...')
             project_path_text.SetToolTip(vscode_project.url)
             project_path_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))

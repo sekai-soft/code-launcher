@@ -14,6 +14,9 @@ from code_launcher.ensure_shortcuts_folder import ensure_shortcuts_folder
 MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID = 1
 MENU_ITEM_ABOUT_ID = 2
 MENU_ITEM_EXIT_ID = 3
+WINDOW_WIDTH = 384
+TEXT_CUTOFF_THRESHOLD = WINDOW_WIDTH - 20
+TEXT_CUTOFF_LENGTH = 39
 
 
 def scale_bitmap(bitmap, width, height):
@@ -27,7 +30,7 @@ class MyFrame(wx.Frame):
         self.defaultFont = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, DEFAULT_FONT_FAMILY)
         self.defaultFontBold = wx.Font(DEFAULT_FONT_SIZE, wx.DEFAULT, wx.NORMAL, wx.BOLD, False, DEFAULT_FONT_FAMILY)
 
-        wx.Frame.__init__(self, None, title=APP_NAME, size=(384, 683), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
+        wx.Frame.__init__(self, None, title=APP_NAME, size=(WINDOW_WIDTH, 683), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
         self.taskBarIcon = MyTaskBarIcon(self)
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)
@@ -56,7 +59,7 @@ class MyFrame(wx.Frame):
         self.SetMenuBar(menuBar)
 
         self.panel = wx.ScrolledWindow(self)
-        self.panel.SetScrollRate(5, 5)
+        self.panel.SetScrollRate(0, 5)
         self.panel.SetFont(self.defaultFont)
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.panel.SetSizer(self.sizer)
@@ -129,12 +132,18 @@ class MyFrame(wx.Frame):
             project_texts_sizer = wx.BoxSizer(wx.VERTICAL)
 
             project_name_text = wx.StaticText(self.panel, label=vscode_project.inferred_project_name)
+            if project_name_text.GetSize().width > TEXT_CUTOFF_THRESHOLD:
+                project_name_text.SetLabel(vscode_project.inferred_project_name[:TEXT_CUTOFF_LENGTH] + '...')
+            project_name_text.SetToolTip(vscode_project.inferred_project_name)
             project_name_text.SetFont(self.defaultFontBold)
             project_name_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_name_text.Bind(wx.EVT_LEFT_DOWN, lambda event, uri=vscode_project.folder_uri: self.onLaunchVscodeProject(event, uri))
             project_texts_sizer.Add(project_name_text)
 
             project_path_text = wx.StaticText(self.panel, label=vscode_project.url)
+            if project_path_text.GetSize().width > TEXT_CUTOFF_THRESHOLD:
+                project_path_text.SetLabel(vscode_project.url[:TEXT_CUTOFF_LENGTH] + '...')
+            project_path_text.SetToolTip(vscode_project.url)
             project_path_text.SetCursor(wx.Cursor(wx.CURSOR_HAND))
             project_path_text.Bind(wx.EVT_LEFT_DOWN, lambda event, uri=vscode_project.folder_uri: self.onLaunchVscodeProject(event, uri))
             project_texts_sizer.Add(project_path_text)

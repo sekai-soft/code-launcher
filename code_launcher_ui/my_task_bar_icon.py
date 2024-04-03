@@ -30,7 +30,7 @@ class MyTaskBarIcon(TaskBarIcon):
         if event_id == MENU_ITEM_SHOW_ID:
             self._show()
         elif event_id == MENU_ITEM_QUIT_ID:
-            self.frame.Close()
+            self.frame.quit()
 
     def OnTaskBarLeftClick(self, event):
         # this is no-op under macOS because the left click triggers the task bar menu

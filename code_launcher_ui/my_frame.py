@@ -186,9 +186,17 @@ class MyFrame(wx.Frame):
         elif event_id == MENU_ITEM_ABOUT_ID:
             subprocess.run([opener, "https://github.com/sekai-soft/code-launcher"])
         elif event_id == MENU_ITEM_QUIT_ID:
-            self.onClose(event)
+            self.quit(event)
 
     def onClose(self, event):
+        if platform.system() == 'Darwin':
+            self.Hide()
+        else:
+            self.taskBarIcon.RemoveIcon()
+            self.taskBarIcon.Destroy()
+            self.Destroy()
+
+    def quit(self):
         self.taskBarIcon.RemoveIcon()
         self.taskBarIcon.Destroy()
         self.Destroy()

@@ -35,6 +35,7 @@ Then find the built app in `dist` folder
 ```
 source ./venv/bin/activate
 pyinstaller --name "Code Launcher" --windowed --icon assets/icon.ico --add-data "assets:." --clean --noconfirm ./app.py
+/usr/libexec/PlistBuddy -c "Add :LSUIElement bool true" dist/Code\ Launcher.app/Contents/Info.plist
 ```
 
 Then find the built app in `dist` folder

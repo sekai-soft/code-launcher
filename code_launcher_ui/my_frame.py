@@ -13,7 +13,7 @@ from code_launcher.ensure_shortcuts_folder import ensure_shortcuts_folder
 
 MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID = 1
 MENU_ITEM_ABOUT_ID = 2
-MENU_ITEM_EXIT_ID = 3
+MENU_ITEM_QUIT_ID = 3
 WINDOW_WIDTH = 384
 TEXT_CUTOFF_THRESHOLD_WIDTH = 312
 TEXT_CUTOFF_LENGTH = 39
@@ -51,8 +51,8 @@ class MyFrame(wx.Frame):
             kind = wx.ITEM_NORMAL))
         helpMenu.Append(wx.MenuItem(
             helpMenu,
-            MENU_ITEM_EXIT_ID,
-            text = "Exit",
+            MENU_ITEM_QUIT_ID,
+            text = "Quit",
             kind = wx.ITEM_NORMAL))
         menuBar.Append(helpMenu, 'Help')
         self.Bind(wx.EVT_MENU, self.onHandleMenuBar) 
@@ -185,7 +185,7 @@ class MyFrame(wx.Frame):
             subprocess.run([opener, ensure_shortcuts_folder()])
         elif event_id == MENU_ITEM_ABOUT_ID:
             subprocess.run([opener, "https://github.com/sekai-soft/code-launcher"])
-        elif event_id == MENU_ITEM_EXIT_ID:
+        elif event_id == MENU_ITEM_QUIT_ID:
             self.onClose(event)
 
     def onClose(self, event):

@@ -3,17 +3,12 @@ import subprocess
 import platform
 from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLANATION, project_type_to_icon, DEFAULT_FONT_SIZE, DEFAULT_FONT_FAMILY
 from .my_task_bar_icon import MyTaskBarIcon
-from code_launcher.exception import UnsupportedOSException
 from code_launcher.read_vscode_state import read_vscode_state
 from code_launcher.find_vscode import find_vscode_exe_path
 from code_launcher.reconcile import reconcile
 from code_launcher.diff import diff
-from code_launcher.ensure_shortcuts_folder import ensure_shortcuts_folder
 
 
-MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID = 1
-MENU_ITEM_ABOUT_ID = 2
-MENU_ITEM_QUIT_ID = 3
 WINDOW_WIDTH = 384
 TEXT_CUTOFF_THRESHOLD_WIDTH = 312
 TEXT_CUTOFF_LENGTH = 39
@@ -35,28 +30,6 @@ class MyFrame(wx.Frame):
         self.SetIcon(wx.Icon(APP_ICON, wx.BITMAP_TYPE_ICO))
         self.Bind(wx.EVT_CLOSE, self.onClose)
         self.Bind(wx.EVT_ICONIZE, self.onMinimize)
-
-        menuBar = wx.MenuBar() 
-        helpMenu = wx.Menu() 
-        helpMenu.Append(wx.MenuItem(
-            helpMenu,
-            MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID,
-            text = "Open shortcuts folder",
-            kind = wx.ITEM_NORMAL))
-        helpMenu.AppendSeparator()
-        helpMenu.Append(wx.MenuItem(
-            helpMenu,
-            MENU_ITEM_ABOUT_ID,
-            text = "About",
-            kind = wx.ITEM_NORMAL))
-        helpMenu.Append(wx.MenuItem(
-            helpMenu,
-            MENU_ITEM_QUIT_ID,
-            text = "Quit",
-            kind = wx.ITEM_NORMAL))
-        menuBar.Append(helpMenu, 'Help')
-        self.Bind(wx.EVT_MENU, self.onHandleMenuBar) 
-        self.SetMenuBar(menuBar)
 
         self.panel = wx.ScrolledWindow(self)
         self.panel.SetScrollRate(0, 5)
@@ -172,29 +145,11 @@ class MyFrame(wx.Frame):
             f'What is "{SYNC_TO_OS_BUTTON_LABEL}"?',
             wx.OK | wx.ICON_INFORMATION)
 
-    def onHandleMenuBar(self, event):
-        event_id = event.GetId()
-        if platform.system() == 'Windows':
-            opener = 'explorer.exe'
-        elif platform.system() == 'Darwin':
-            opener = 'open'
-        else:
-            raise UnsupportedOSException()
-
-        if event_id == MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID: 
-            subprocess.run([opener, ensure_shortcuts_folder()])
-        elif event_id == MENU_ITEM_ABOUT_ID:
-            subprocess.run([opener, "https://github.com/sekai-soft/code-launcher"])
-        elif event_id == MENU_ITEM_QUIT_ID:
-            self.quit(event)
-
     def onClose(self, event):
         if platform.system() == 'Darwin':
             self.Hide()
         else:
-            self.taskBarIcon.RemoveIcon()
-            self.taskBarIcon.Destroy()
-            self.Destroy()
+            self.quit()
 
     def quit(self):
         self.taskBarIcon.RemoveIcon()
@@ -202,5 +157,4 @@ class MyFrame(wx.Frame):
         self.Destroy()
 
     def onMinimize(self, event):
-        if self.IsIconized():
-            self.Hide()
+        self.Hide()

@@ -24,7 +24,7 @@ jobs:
 
       - name: Build with PyInstaller
         run: |
-          pyinstaller --name "Code Launcher" --windowed --icon assets\icon.ico --add-data "assets:." --clean --noconfirm .\app.py
+          pyinstaller --clean --noconfirm "Code Launcher.spec"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

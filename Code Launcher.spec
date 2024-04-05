@@ -50,12 +50,14 @@ coll = COLLECT(
     upx_exclude=[],
     name='Code Launcher',
 )
-app = BUNDLE(
-    coll,
-    name='Code Launcher.app',
-    icon=icon_file,
-    bundle_identifier=None,
-    info_plist={
-        'LSUIElement': True
-    }
-)
+
+if platform.system() == 'Darwin':
+    app = BUNDLE(
+        coll,
+        name='Code Launcher.app',
+        icon=icon_file,
+        bundle_identifier=None,
+        info_plist={
+            'LSUIElement': True
+        }
+    )

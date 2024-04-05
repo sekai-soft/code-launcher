@@ -39,7 +39,7 @@ Under the "Artifacts" section
 ### Package app on Windows
 ```
 .\venv\Scripts\activate.bat
-pyinstaller --name "Code Launcher" --windowed --icon assets\icon.ico --add-data "assets:." --clean --noconfirm .\app.py
+pyinstaller --clean --noconfirm "Code Launcher.spec"
 ```
 
 Then find the built app in `dist` folder

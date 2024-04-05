@@ -47,8 +47,7 @@ Then find the built app in `dist` folder
 ### Package app on macOS
 ```
 source ./venv/bin/activate
-pyinstaller --name "Code Launcher" --windowed --icon assets/icon_macos.ico --add-data "assets:." --clean --noconfirm ./app.py
-/usr/libexec/PlistBuddy -c "Add :LSUIElement bool true" dist/Code\ Launcher.app/Contents/Info.plist
+pyinstaller --clean --noconfirm "Code Launcher.spec"
 ```
 
 Then find the built app in `dist` folder

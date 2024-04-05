@@ -1,5 +1,5 @@
 # Code Launcher
-Jetbrains Toolbox for VSCode!
+Jetbrains Toolbox for VSCode! 
 
 ## Screenshots
 Windows                    |  macOS

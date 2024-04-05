@@ -2,8 +2,9 @@
 Jetbrains Toolbox for VSCode!
 
 ## Screenshots
-![Screenshot of Code Launcher on Windows](./docs/win-screenshot.png)
-![Screenshot of Code Launcher on macOS](./docs/mac-screenshot.png)
+Windows                    |  macOS
+:-------------------------:|:-------------------------:
+![Screenshot of Code Launcher on Windows](./docs/win-screenshot.png) | ![Screenshot of Code Launcher on macOS](./docs/mac-screenshot.webp)
 
 ## Features
 * Lists all your VSCode workspaces

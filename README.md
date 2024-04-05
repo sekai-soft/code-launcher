@@ -10,7 +10,7 @@ Windows                    |  macOS
 * Lists all your VSCode workspaces
 * Opens workspaces with one-click
     * Supports local, WSL, DevContainer and remote SSH workspaces
-* Syncs workspaces as shortcuts to various places on the OS so that you can search for open them conveniently
+* Syncs workspaces as shortcuts to various places on the OS so that you can search for and open them conveniently
     * Start menu (Windows)
     * PowerToys Run (Windows)
     * Spotlight (macOS)

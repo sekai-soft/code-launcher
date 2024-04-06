@@ -45,9 +45,9 @@ class MyTaskBarIcon(TaskBarIcon):
         if event_id == MENU_ITEM_SHOW_ID:
             self._show()
         elif event_id == MENU_ITEM_OPEN_SHORTCUTS_FOLDER_ID:
-            subprocess.run([opener, ensure_shortcuts_folder()])
+            subprocess.run([opener, ensure_shortcuts_folder()], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         elif event_id == MENU_ITEM_ABOUT_ID:
-            subprocess.run([opener, "https://github.com/sekai-soft/code-launcher"])
+            subprocess.run([opener, "https://github.com/sekai-soft/code-launcher"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         elif event_id == MENU_ITEM_QUIT_ID:
             self.frame.quit()
 

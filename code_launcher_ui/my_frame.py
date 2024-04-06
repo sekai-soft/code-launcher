@@ -129,7 +129,7 @@ class MyFrame(wx.Frame):
             self.sizer.Layout()
     
     def onLaunchVscodeProject(self, event, project_uri: str):
-        subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri])
+        subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def onSyncFromVSCode(self, event):
         self.sizer.Clear(True)

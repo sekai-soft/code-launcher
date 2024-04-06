@@ -1,5 +1,6 @@
 import wx
 import subprocess
+import multiprocessing
 import platform
 from .constants import APP_ICON, APP_NAME, SYNC_TO_OS_BUTTON_LABEL, SYNC_EXPLANATION, project_type_to_icon, DEFAULT_FONT_SIZE, DEFAULT_FONT_FAMILY
 from .my_task_bar_icon import MyTaskBarIcon
@@ -18,6 +19,10 @@ def scale_bitmap(bitmap, width, height):
     image = wx.Bitmap.ConvertToImage(bitmap)
     image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
     return wx.Bitmap(image)
+
+
+def launch_vscode_project(folder_uri: str):
+    subprocess.run([find_vscode_exe_path(), '--folder-uri', folder_uri], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 class MyFrame(wx.Frame):
@@ -127,9 +132,9 @@ class MyFrame(wx.Frame):
             self.sizer.AddSpacer(16)
             # added to prevent refreshing UI causing texts overlapping, don't know why though :(
             self.sizer.Layout()
-    
+
     def onLaunchVscodeProject(self, event, project_uri: str):
-        subprocess.run([find_vscode_exe_path(), '--folder-uri', project_uri], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        multiprocessing.Process(target=launch_vscode_project, args=(project_uri,)).start()
 
     def onSyncFromVSCode(self, event):
         self.sizer.Clear(True)

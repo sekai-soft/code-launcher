@@ -1,6 +1,7 @@
 import platform
 import os
 import re
+import hashlib
 from enum import Enum
 from dataclasses import dataclass
 from urllib.parse import urlparse, unquote
@@ -72,6 +73,10 @@ def _decoded_path_as_safe_filename(decoded_path: str) -> str:
         return res
 
 
+def _hash_dev_container_hash(dev_container_hash: str) -> str:
+    return hashlib.sha256(dev_container_hash.encode('utf-8')).hexdigest()[:8]
+
+
 def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
     parsed_uri = urlparse(uri)
 
@@ -97,8 +102,13 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
         elif decoded_netloc.startswith('dev-container+'):
             project_type = VscodeProjectType.DevContainer
             dev_container_hash = decoded_netloc[len('dev-container+'):]
-            unique_project_identifier = dev_container_hash[:8]
-            url = 'dev-container'
+            if '@ssh-remote+' in dev_container_hash:
+                ssh_ip = dev_container_hash.split('@ssh-remote+')[1]
+                dev_container_hash = dev_container_hash.split('@ssh-remote+')[0]
+                url = f"{ssh_ip}:dev-container-{_hash_dev_container_hash(dev_container_hash)}"
+            else:
+                url = f'dev-container-{_hash_dev_container_hash(dev_container_hash)}'
+            unique_project_identifier = _decoded_path_as_safe_filename(url)
         elif decoded_netloc.startswith('ssh-remote+'):
             decoded_path = unquote(parsed_uri.path)
             project_type = VscodeProjectType.SshRemote

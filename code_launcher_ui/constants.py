@@ -53,6 +53,10 @@ SSH_REMOTE_PROJECT_ICON = asset_file('ssh-remote.ico')
 if platform.system() == 'Darwin' and is_macos_dark_mode():
     SSH_REMOTE_PROJECT_ICON = asset_file('ssh-remote_macos_dark.ico')
 
+TUNNEL_PROJECT_ICON = asset_file('tunnel.ico')
+if platform.system() == 'Darwin' and is_macos_dark_mode():
+    TUNNEL_PROJECT_ICON = asset_file('tunnel_macos_dark.ico')
+
 if platform.system() == 'Windows':
     SYNC_TO_OS_BUTTON_LABEL = "Sync to Start menu"
 elif platform.system() == 'Darwin':
@@ -72,4 +76,6 @@ def project_type_to_icon(project_type) -> str:
         return DEV_CONTAINER_PROJECT_ICON
     elif project_type == VscodeProjectType.SshRemote:
         return SSH_REMOTE_PROJECT_ICON
+    elif project_type == VscodeProjectType.Tunnel:
+        return TUNNEL_PROJECT_ICON
     raise CodeLauncherUiException(f"Unknown project type: {project_type}")

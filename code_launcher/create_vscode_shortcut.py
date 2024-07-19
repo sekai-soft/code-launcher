@@ -25,7 +25,7 @@ def create_vscode_shortcut(shortcut: ExistingShortcut):
         create_macos_app(
             shortcut.project_name,
             # shebang is important here otherwise macOS won't be able to recognize the .app bundle as executable
-            "#!/bin/bash\n" + find_vscode_exe_path().replace(" ", "\ ") + " --folder-uri " + shortcut.folder_uri)
+            "#!/bin/bash\n" + find_vscode_exe_path().replace(" ", r"\ ") + " --folder-uri " + shortcut.folder_uri)
         return
 
     raise UnsupportedOSException()

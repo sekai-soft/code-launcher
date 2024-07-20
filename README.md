@@ -20,7 +20,7 @@ Windows                    |  macOS
     * Tested on Windows 11
         * Windows 10 should work as well
     * Tested on macOS Sonoma on Apple Silicon
-        * Should work as low as macOS Catalina
+        * Should work as low as macOS Big Sur
 
 ## Download
 * Windows
@@ -56,7 +56,7 @@ Then find the built app in `app.dist` folder
 </details>
 
 <details>
-<summary>On MacOS</summary>
+<summary><h3>On MacOS</h3></summary>
 
 ### Set Up Development Environment
 ```

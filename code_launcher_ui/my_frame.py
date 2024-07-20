@@ -10,8 +10,8 @@ from code_launcher.reconcile import reconcile
 from code_launcher.diff import diff
 
 
-WINDOW_WIDTH = 384
-TEXT_CUTOFF_THRESHOLD_WIDTH = 312
+WINDOW_WIDTH = 408
+TEXT_CUTOFF_THRESHOLD_WIDTH = 336
 TEXT_CUTOFF_LENGTH = 39
 
 

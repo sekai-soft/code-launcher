@@ -1,6 +1,7 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -17,20 +18,27 @@ jobs:
         with:
           python-version: 3.12
       
-      - name: Install dependencies
+      - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt -r requirements_win.txt
 
-      - name: Build with PyInstaller
+      - name: Install MSVC toolchain
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Build with Nuitka
         run: |
-          pyinstaller --clean --noconfirm "Code Launcher.spec"
+          python -m nuitka app.py
+          mv app.exe "Code Launcher.exe"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: dist/*
+          path: |
+            Code Launcher.exe
 
   build-mac-m1:
     runs-on: macos-14
@@ -46,16 +54,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt -r requirements_mac.txt
 
-      - name: Build with PyInstaller
+      - name: Build with Nuitka
         run: |
-          pyinstaller --clean --noconfirm "Code Launcher.spec"
-          cd dist/
-          zip -r9 "Code Launcher" "Code Launcher.app/"
+          python -m nuitka app.py
+          mv app.app 'Code Launcher.app'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac-arm
-          path: dist/Code Launcher.zip
+          path: |
+            Code Launcher.app

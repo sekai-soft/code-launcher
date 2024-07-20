@@ -2,18 +2,18 @@ import platform
 import os
 import sys
 import subprocess
+from onefile_patch import MAIN_RUN_DIR
 from .exception import CodeLauncherUiException
 from code_launcher.parse_vscode_uri import VscodeProjectType
 
 
 DEV_ASSETS_FOLDER = 'assets'
 
-
 # https://www.reddit.com/r/learnpython/comments/4kjie3/how_to_include_gui_images_with_pyinstaller/
 def asset_file(relative_file):
      if hasattr(sys, '_MEIPASS'):
          return os.path.join(sys._MEIPASS, relative_file)
-     return os.path.join(os.path.abspath("."), DEV_ASSETS_FOLDER, relative_file)
+     return os.path.join(MAIN_RUN_DIR, DEV_ASSETS_FOLDER, relative_file)
 
 
 # https://stackoverflow.com/questions/65294987/detect-os-dark-mode-in-python

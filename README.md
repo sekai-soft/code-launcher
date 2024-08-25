@@ -16,14 +16,20 @@ Windows                    |  macOS
     * Spotlight (macOS)
     * Alfred (macOS)
     * Raycast (macOS)
+    * GNOME Search (Linux)
+    * Ulauncher (Linux)
 * Supports Windows and macOS
     * Tested on Windows 11
         * Windows 10 should work as well
     * Tested on macOS Sonoma on Apple Silicon
         * Should work as low as macOS Catalina
     * Partial Linux support
-        * There is an CLI that can sync VSCode workspaces to the standard user XDG desktop entries folder `~/.local/share/applications`. There is no GUI yet.
-        * The following needs to be available: `update-desktop-database` and `notify-send`
+        * .deb installation (not flatpak) of VSCode on Ubuntu 24.04 (GNOME) is tested but it should work on other distros/DEs where
+            * VSCode binary is installed at `/usr/share/code/code`
+            * VSCode config is located at `~/.config/Code`
+            * XDG desktop entries in the standard user XDG desktop entries folder `~/.local/share/applications`is supported
+        * There is an CLI that can sync VSCode workspaces to `~/.local/share/applications` as desktop entries. There is no GUI yet.
+        * The following commands needs to be available: `update-desktop-database` and `notify-send`
 
 ## Download
 * Windows

@@ -21,6 +21,9 @@ Windows                    |  macOS
         * Windows 10 should work as well
     * Tested on macOS Sonoma on Apple Silicon
         * Should work as low as macOS Catalina
+    * Partial Linux support
+        * There is an CLI that can sync VSCode workspaces to the standard user XDG desktop entries folder `~/.local/share/applications`. There is no GUI yet.
+        * The following needs to be available: `update-desktop-database` and `notify-send`
 
 ## Download
 * Windows
@@ -30,21 +33,28 @@ Windows                    |  macOS
 * macOS (Apple Silicon)
     * Download [here](https://nightly.link/sekai-soft/code-launcher/workflows/build/master/mac-arm.zip)
     * Unzip the downloaded file and copy `Code Launcher.app` to your `Applications` folder*
+* Linux (CLI)
+    * Follow "Initialize development environment" and "Install dependencies" in "Develop app on Linux" section
+    * Install a desktop shortcut for the CLI by copying `Reconcile Code Launcher.desktop` to your XDG desktop entries folder
+        * Make sure to change `<PATH_TO_CODE_LAUNCHER>` to your actual folder path to the repo
+        * Remember to execute `update-desktop-database` (sudo if putting the file in non-user places like `/usr/share/applications`)
 
 ## Development
 
-### Package app on Windows
-```
-.\venv\Scripts\activate.bat
-pyinstaller --clean --noconfirm "Code Launcher.spec"
-```
+### Initialize development environment
+* Make sure Python 3.11 or above is installed
+* Initialize virtual environment: `python3 -m venv venv`
 
-Then find the built app in `dist` folder
+### Develop app on Windows
+* Install dependencies: `.\venv\Scripts\pip install -r requirements.txt -r requirements_win.txt`
+* Run the app: `.\venv\Scripts\python app.py`
+* Build the app: `.\venv\Scripts\pyinstaller --clean --noconfirm "Code Launcher.spec"` (the built app can be found in `dist` folder)
 
-### Package app on macOS
-```
-source ./venv/bin/activate
-pyinstaller --clean --noconfirm "Code Launcher.spec"
-```
+### Develop app on macOS
+* Install dependencies: `./venv/bin/pip install -r requirements.txt`
+* Run the app: `./venv/bin/python app.py`
+* Build the app: `./venv/bin/pyinstaller --clean --noconfirm "Code Launcher.spec"` (the built app can be found in `dist` folder)
 
-Then find the built app in `dist` folder
+### Develop app on Linux
+* Install dependencies: `./venv/bin/pip install -r requirements.txt`
+* Run the CLI: `./venv/bin/python cli.py`

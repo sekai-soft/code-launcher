@@ -40,7 +40,7 @@ def _compute_url_for_file_project(path: str) -> str:
         if windows_path.startswith(windows_user_profile):
             return windows_path.replace(os.environ['USERPROFILE'], '~')
         return windows_path
-    elif platform.system() == 'Darwin':
+    elif platform.system() == 'Darwin' or platform.system() == 'Linux':
         if 'HOME' not in os.environ:
             return path
         home = os.environ['HOME']

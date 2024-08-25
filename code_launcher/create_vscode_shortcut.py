@@ -28,4 +28,20 @@ def create_vscode_shortcut(shortcut: ExistingShortcut):
             "#!/bin/bash\n" + find_vscode_exe_path().replace(" ", "\ ") + " --folder-uri " + shortcut.folder_uri)
         return
 
+    elif platform.system() == 'Linux':
+        desktop_entry_file = os.path.join(ensure_shortcuts_folder(), f'{shortcut.project_name}.desktop')
+        with open(desktop_entry_file, 'w') as f:
+            # need to escape % into %% in folder_uri
+            f.write(f"""[Desktop Entry]
+Type=Application
+Version=1.0
+Name={shortcut.project_name}
+Comment=Launches {shortcut.project_name} in VSCode
+Exec={find_vscode_exe_path()} --folder-uri {shortcut.folder_uri.replace("%", "%%")}
+Icon=vscode
+Terminal=false
+Categories=Development;
+""")
+        return
+
     raise UnsupportedOSException()

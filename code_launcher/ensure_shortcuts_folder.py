@@ -24,4 +24,14 @@ def ensure_shortcuts_folder() -> str:
             os.makedirs(p)
         return p
 
+    elif platform.system() == 'Linux':
+        if 'HOME' not in os.environ:
+            raise CodeLauncherException('HOME environment variable is not found')
+        p = os.path.join(
+            os.environ['HOME'],
+            '.local', 'share', 'applications', 'Code Launcher Shortcuts')
+        if not os.path.exists(p):
+            os.makedirs(p)
+        return p
+
     raise UnsupportedOSException()

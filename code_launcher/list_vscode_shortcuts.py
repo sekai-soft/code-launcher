@@ -37,4 +37,18 @@ def list_vscode_shortcuts() -> List[ExistingShortcut]:
                         f.read().split(" --folder-uri ")[1]))
         return folder_uris
 
+    elif platform.system() == 'Linux':
+        folder_uris = []
+        for _, _, files in os.walk(ensure_shortcuts_folder()):
+            for f in files:
+                if f.endswith(".desktop"):
+                    desktop_f = os.path.join(ensure_shortcuts_folder(), f)
+                    with open(desktop_f, 'r') as _f:
+                        for line in _f:
+                            if line.startswith("Exec="):
+                                folder_uris.append(ExistingShortcut(
+                                    f[:-len(".desktop")],
+                                    line.split(" ")[2].replace("%%", "%").strip()))
+        return folder_uris
+
     raise UnsupportedOSException()

@@ -27,4 +27,17 @@ def delete_vscode_shortcut(folder_uri: str):
                         shutil.rmtree(os.path.join(ensure_shortcuts_folder(), app_folder))
         return
 
+    elif platform.system() == 'Linux':
+        for _, _, files in os.walk(ensure_shortcuts_folder()):
+            for f in files:
+                if f.endswith(".desktop"):
+                    desktop_f = os.path.join(ensure_shortcuts_folder(), f)
+                    with open(desktop_f, 'r') as _f:
+                        for line in _f:
+                            if line.startswith("Exec="):
+                                found_folder_uri = line.split(" ")[2].replace("%%", "%").strip()
+                                if found_folder_uri == folder_uri:
+                                    os.remove(desktop_f)
+        return
+
     raise UnsupportedOSException()

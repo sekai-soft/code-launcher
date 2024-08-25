@@ -31,6 +31,10 @@ def get_vscode_state_path() -> str:
         if 'HOME' not in os.environ:
             raise CodeLauncherException("HOME is not found in environment variables")
         return os.path.join(os.environ['HOME'], "Library", "Application Support", "Code", "User", "globalStorage", "state.vscdb")
+    elif platform.system() == 'Linux':
+        if 'HOME' not in os.environ:
+            raise CodeLauncherException("HOME is not found in environment variables")
+        return os.path.join(os.environ['HOME'], ".config", "Code", "User", "globalStorage", "state.vscdb")
     raise UnsupportedOSException()
 
 

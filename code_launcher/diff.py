@@ -18,7 +18,7 @@ class Diff:
         return len(self.adding_shortcuts) != 0 and len(self.deleting_shortcuts) == 0
 
 
-def diff():
+def diff() -> Diff:
     # read from VSCode state
     parsed_vscode_projects = read_vscode_state()
     

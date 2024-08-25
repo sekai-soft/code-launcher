@@ -45,4 +45,9 @@ def find_vscode_exe_path() -> str:
         if not os.path.exists(p):
             raise CodeLauncherException("VSCode executable path is not found")
         return p
+    elif platform.system() == 'Linux':
+        p = os.path.join("/", "usr", "share", "code", "code")
+        if not os.path.exists(p):
+            raise CodeLauncherException("VSCode executable path is not found")
+        return p
     raise UnsupportedOSException()

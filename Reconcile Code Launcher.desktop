@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Reconcile Code Launcher
+Comment=Reconcile VSCode projects as Code Launcher shortcuts
+Exec=/bin/bash -c 'notify-send "$(<PATH_TO_CODE_LAUNCHER>/venv/bin/python <PATH_TO_CODE_LAUNCHER>/cli.py)"'
+Icon=vscode
+Terminal=false
+Categories=Utility;
